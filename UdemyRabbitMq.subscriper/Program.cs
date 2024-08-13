@@ -4,27 +4,36 @@ using RabbitMQ.Client.Events;
 using System;
 
 var factory = new ConnectionFactory();
-factory.Uri = new Uri("amqps://jxjiydev:GJ7PIC3hG0_JWAQ2_6oB4BQwYLM4qJVU@shrimp.rmq.cloudamqp.com/jxjiydev");
+//factory.Uri = new Uri("amqps://jxjiydev:GJ7PIC3hG0_JWAQ2_6oB4BQwYLM4qJVU@shrimp.rmq.cloudamqp.com/jxjiydev");
+factory.Uri = new Uri("amqp://localhost:5672");
+
+using (var connection = factory.CreateConnection())
+using (var channel = connection.CreateModel())
+{
+    //channel.ExchangeDeclare("log-fanout", type: ExchangeType.Fanout);
+    var queueName = channel.QueueDeclare().QueueName;
+    //var queueName = "queueName";
+
+    //channel.QueueDeclare(queueName, true, false, false);
+    channel.QueueBind(queue: queueName, exchange: "log-fanout", routingKey: "");
+
+    channel.BasicQos(0, 1, false);
+
+    EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
+    channel.BasicConsume(queueName, false, consumer);
 
 
-    using (var connection = factory.CreateConnection())
-    using (var channel = connection.CreateModel())
+    consumer.Received += (model, ea) =>
     {
-        channel.BasicQos(0, 1, false);
+        Thread.Sleep(1000);
 
-        var consumer = new EventingBasicConsumer(channel);
-        channel.BasicConsume("demo-queue", false, consumer);
+        var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+        Console.WriteLine($"Received: {message}");
 
-        consumer.Received += (model, ea) =>
-        {
-            var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-                Console.WriteLine($"Received: {message}");
-                Thread.Sleep(1500);
+        channel.BasicAck(ea.DeliveryTag, false);
 
-                channel.BasicAck(ea.DeliveryTag, false);
-                
-        };
+    };
 
-        Console.WriteLine("Press [enter] to exit.");
-        Console.ReadLine(); // Keep the application running
-    }
+    Console.WriteLine("Press [enter] to exit.");
+    Console.ReadLine(); // Keep the application running
+}

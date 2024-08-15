@@ -2,6 +2,8 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
+using System.Text.Json;
+using Shared;
 
 var factory = new ConnectionFactory();
 factory.Uri = new Uri("amqp://localhost:5672");
@@ -31,8 +33,10 @@ using (var channel = connection.CreateModel())
         Thread.Sleep(1000);
 
         var message = Encoding.UTF8.GetString(ea.Body.ToArray());
-        Console.WriteLine($"Gelen Mesaj: {message}");
-        //File.AppendAllText("logs.txt", message + Environment.NewLine);
+
+        Product product = JsonSerializer.Deserialize<Product>(message);
+
+        Console.WriteLine($"Gelen Mesaj: {product.Id}-{product.Name}-{product.Price}-{product.Stock}");
 
         channel.BasicAck(ea.DeliveryTag, false);
 

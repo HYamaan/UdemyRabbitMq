@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using System.Text.Json;
 using RabbitMQ.Client;
+using Shared;
 using UdemyRabbitMq.publisher;
 
 var factory = new ConnectionFactory();
@@ -18,8 +20,11 @@ using (var connection = factory.CreateConnection())
     properties.Headers = headers;
     properties.Persistent = true; // Message will be saved to disk
 
+    var product = new Product {Id=1, Name = "Laptop", Price = 1000,Stock = 10};
+    var productJson = JsonSerializer.Serialize(product);
+
     var message = "header message";
-    var body = Encoding.UTF8.GetBytes(message);
+    var body = Encoding.UTF8.GetBytes(productJson);
     channel.BasicPublish("header-exchange",string.Empty,properties,body);
 
 

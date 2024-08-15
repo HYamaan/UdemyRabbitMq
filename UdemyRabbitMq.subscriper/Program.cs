@@ -4,7 +4,6 @@ using RabbitMQ.Client.Events;
 using System;
 
 var factory = new ConnectionFactory();
-//factory.Uri = new Uri("amqps://jxjiydev:GJ7PIC3hG0_JWAQ2_6oB4BQwYLM4qJVU@shrimp.rmq.cloudamqp.com/jxjiydev");
 factory.Uri = new Uri("amqp://localhost:5672");
 
 using (var connection = factory.CreateConnection())
@@ -15,9 +14,14 @@ using (var channel = connection.CreateModel())
 
 
     var queueName = channel.QueueDeclare().QueueName;
-    //var routeKey = "*.*.Warning";
-    var routeKey = "Info.#";
-    channel.QueueBind(queueName, "log-topic", routeKey);
+
+    Dictionary<string, object> headers = new Dictionary<string, object>();
+
+    headers.Add("format", "pdf");
+    headers.Add("shape", "a4");
+    headers.Add("x-match", "all");  
+
+    channel.QueueBind(queueName, "header-exchange", string.Empty,headers);
 
     channel.BasicConsume(queueName, false, consumer);
     Console.WriteLine("Mesajlar bekleniyor...");

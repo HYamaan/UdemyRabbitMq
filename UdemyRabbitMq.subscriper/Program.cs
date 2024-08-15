@@ -14,9 +14,13 @@ using (var channel = connection.CreateModel())
     EventingBasicConsumer consumer = new EventingBasicConsumer(channel);
 
 
-    var queueName = "direct-queue-Critical";
-    channel.BasicConsume(queueName, false, consumer);
+    var queueName = channel.QueueDeclare().QueueName;
+    //var routeKey = "*.*.Warning";
+    var routeKey = "Info.#";
+    channel.QueueBind(queueName, "log-topic", routeKey);
 
+    channel.BasicConsume(queueName, false, consumer);
+    Console.WriteLine("Mesajlar bekleniyor...");
 
     consumer.Received += (model, ea) =>
     {
@@ -29,7 +33,5 @@ using (var channel = connection.CreateModel())
         channel.BasicAck(ea.DeliveryTag, false);
 
     };
-
-    Console.WriteLine("Press [enter] to exit.");
     Console.ReadLine(); // Keep the application running
 }

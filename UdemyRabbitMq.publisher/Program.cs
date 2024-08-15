@@ -16,6 +16,7 @@ using (var connection = factory.CreateConnection())
 
     var properties = channel.CreateBasicProperties();
     properties.Headers = headers;
+    properties.Persistent = true; // Message will be saved to disk
 
     var message = "header message";
     var body = Encoding.UTF8.GetBytes(message);

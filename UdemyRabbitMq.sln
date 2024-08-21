@@ -12,7 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{F2E85167-8619-422D-87F6-5FF7286EE49D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{F2E85167-8619-422D-87F6-5FF7286EE49D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdemyRabbitMqWeb.Watermark", "UdemyRabbitMqWeb.Watermark\UdemyRabbitMqWeb.Watermark.csproj", "{A7C1C421-658F-4A1A-BFB2-BE4833017EDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{F2E85167-8619-422D-87F6-5FF7286EE49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2E85167-8619-422D-87F6-5FF7286EE49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2E85167-8619-422D-87F6-5FF7286EE49D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7C1C421-658F-4A1A-BFB2-BE4833017EDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7C1C421-658F-4A1A-BFB2-BE4833017EDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7C1C421-658F-4A1A-BFB2-BE4833017EDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7C1C421-658F-4A1A-BFB2-BE4833017EDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
